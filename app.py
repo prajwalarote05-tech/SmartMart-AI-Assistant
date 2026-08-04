@@ -27,8 +27,8 @@ documents = loader.load()
 # Split PDF
 # -----------------------------
 text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,
-    chunk_overlap=200
+    chunk_size=500,
+    chunk_overlap=50
 )
 
 docs = text_splitter.split_documents(documents)
@@ -37,16 +37,19 @@ docs = text_splitter.split_documents(documents)
 # Embeddings
 # -----------------------------
 embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-    model_kwargs={"device": "cpu"}
-}
+    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
+    model_kwargs={"device": "cpu"},
+    encode_kwargs={"normalize_embeddings": True}
+)
 
 vector_db = Chroma.from_documents(
     documents=docs,
     embedding=embeddings
 )
 
-retriever = vector_db.as_retriever(search_kwargs={"k":3})
+retriever = vector_db.as_retriever(
+    search_kwargs={"k":2}
+)
 
 # -----------------------------
 # Chat Function
