@@ -8,5 +8,4 @@ langchain-chroma
 chromadb
 sentence-transformers
 pypdf
-torch
 gunicorn
